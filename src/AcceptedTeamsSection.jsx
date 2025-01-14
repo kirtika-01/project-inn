@@ -74,10 +74,10 @@ const AcceptedTeamsSection = ({ acceptedTeams }) => {
         {/* Grade Field */}
         <label htmlFor="grade">Grade:</label>
         <select id="grade" name="grade" required>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
-          <option value="D">D</option>
+          <option value="A">excellent</option>
+          <option value="B">very good</option>
+          <option value="C">good</option>
+          <option value="D">bad</option>
         </select>
 
         {/* Submit Button */}
