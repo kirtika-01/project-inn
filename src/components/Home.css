@@ -1,0 +1,78 @@
+.home {
+    padding: 20px;
+    padding-top: 80px;
+  }
+  
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .flash-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .flash-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .flash-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #007bff;
+  }
+  
+  .flash-card h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .flash-card p {
+    font-size: 14px;
+    color: #555;
+  }
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 60px); /* Full height minus navbar height */
+    padding: 20px;
+    background-color: #f8f9fa; /* Optional background for better visuals */
+  }
+  
+  .home-container h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #007bff; /* Optional color to match the navbar */
+  }
+  
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+  }
+  .home-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #007bff; /* Optional color */
+    text-align: center; /* Ensures text is centered */
+  }

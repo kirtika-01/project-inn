@@ -1,0 +1,12 @@
+.requests {
+  padding: 20px;
+  padding-top: 80px; /* Add top padding to avoid overlap with the header */
+  overflow-y: auto;
+  height: calc(100vh - 60px); /* Subtract header height for consistent layout */
+}
+
+.request-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

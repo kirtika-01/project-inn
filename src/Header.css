@@ -1,0 +1,26 @@
+.dashboard-header {
+  background: #004d99;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1em;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.logout-button {
+  padding: 0.6em 1.2em;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.logout-button:hover {
+  background: #d43f3f;
+}
