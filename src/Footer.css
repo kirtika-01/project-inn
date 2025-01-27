@@ -12,3 +12,6 @@
 .dashboard-footer p {
   margin: 0;
 }
+.dashboard-footer p:hover {
+  text-decoration: underline;
+}

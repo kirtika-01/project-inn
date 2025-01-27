@@ -112,3 +112,28 @@
 .meet-button:hover {
   background: #5e35b1;
 }
+.popup-form button[type="submit"] {
+  float: right;
+  margin-left: 10px;
+}
+
+.popup-form button[type="button"] {
+  float: left;
+}
+@media (max-width: 600px) {
+  .popup-form {
+    width: 90%;
+    padding: 10px;
+  }
+}
+.popup-overlay {
+  animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

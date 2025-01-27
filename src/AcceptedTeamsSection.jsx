@@ -26,6 +26,10 @@ const AcceptedTeamsSection = ({ acceptedTeams }) => {
 
     // Close the form after submission
     setShowForm(false);
+    };
+    
+    const handleFormCancel = () => {
+      setShowForm(false);
   };
 
   return (
@@ -54,7 +58,7 @@ const AcceptedTeamsSection = ({ acceptedTeams }) => {
       {showForm && (
         <div className="popup-overlay">
           <div className="popup-form">
-            <span className="close-btn" onClick={() => setShowForm(false)}>
+            <span className="close-btn"  aria-label="Close form" onClick={() => setShowForm(false)}>
               &times;
             </span>
             <h3>Schedule Meeting for {selectedTeam.teamName}</h3>
@@ -71,6 +75,7 @@ const AcceptedTeamsSection = ({ acceptedTeams }) => {
           required
         ></textarea>
 
+
         {/* Grade Field */}
         <label htmlFor="grade">Grade:</label>
         <select id="grade" name="grade" required>
@@ -82,6 +87,9 @@ const AcceptedTeamsSection = ({ acceptedTeams }) => {
 
         {/* Submit Button */}
         <button type="submit">Submit</button>
+        <button type="button" onClick={handleFormCancel}>
+                Cancel
+              </button>
       </form>
           </div>
         </div>
