@@ -1,14 +1,14 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RequestsSection from "./RequestsSection";
 import AcceptedTeamsSection from "./AcceptedTeamsSection";
+import Header from "./Header";
+import EvaluationPanel from "./EvaluationPanel"; // Import the new page
 import "./App.css";
-import Header from "./Header"; // Import the Header component
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 const App = () => {
-
   const [requests, setRequests] = useState([
     { id: 1, projectName: "Project A", teamName: "Team Alpha", description: "Idea A description", teamMembers: ["Alice", "Bob"] },
     { id: 2, projectName: "Project B", teamName: "Team Beta", description: "Idea B description", teamMembers: ["Charlie", "David"] },
@@ -27,46 +27,45 @@ const App = () => {
   };
 
   const handleRevise = (id) => {
-    console.log(`Revise request sent for project ID: ${id}`);
     toast.success("Revise request sent to student dashboard");
     setRequests(requests.filter((req) => req.id !== id));
   };
-// Logout function
-const handleLogout = () => {
-  // Add logout logic here (e.g., clear session, redirect to login page)
-  console.log("User  logged out");
-  toast.success("Logged out successfully");
-  // Example: Redirect to login page
-  // window.location.href = "/login";
-};
+
+  const handleLogout = () => {
+    toast.success("Logged out successfully");
+  };
+
   return (
-    <div className="dashboard-container">
-      <Header onLogout={handleLogout} className="dashboard-header" />
-      
-      <main className="dashboard-main">
-        {requests.length > 0 ? (
-          <RequestsSection
-            requests={requests}
-            onAccept={handleAccept}
-            onReject={handleReject}
-            onRevise={handleRevise}
-          />
-        ) : (
-          <div className="accepted-section full-width">
-            <AcceptedTeamsSection acceptedTeams={acceptedTeams} />
-          </div>
-        )}
-        {requests.length > 0 && (
-          <div className="accepted-section">
-            <AcceptedTeamsSection acceptedTeams={acceptedTeams} />
-          </div>
-        )}
-      </main>
-      <footer className="dashboard-footer">
-        &copy; 2025 Team Management
-      </footer>
-      <ToastContainer />
-    </div>
+    <Router>
+      <div className="dashboard-container">
+        <Header onLogout={handleLogout} className="dashboard-header" />
+        <main className="dashboard-main">
+          <Routes>
+            <Route path="/" element={
+              <>
+                {requests.length > 0 ? (
+                  <RequestsSection requests={requests} onAccept={handleAccept} onReject={handleReject} onRevise={handleRevise} />
+                ) : (
+                  <div className="accepted-section full-width">
+                    <AcceptedTeamsSection acceptedTeams={acceptedTeams} />
+                  </div>
+                )}
+                {requests.length > 0 && (
+                  <div className="accepted-section">
+                    <AcceptedTeamsSection acceptedTeams={acceptedTeams} />
+                  </div>
+                )}
+              </>
+            } />
+            <Route path="/evaluation-panel" element={<EvaluationPanel />} />
+          </Routes>
+        </main>
+        <footer className="dashboard-footer">
+          &copy; 2025 Team Management
+        </footer>
+        <ToastContainer />
+      </div>
+    </Router>
   );
 };
 
