@@ -1,10 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react"; // ✅ Correct
+
+import axios from "axios";
 import "./AcceptedTeamsSection.css";
 
+
 const AcceptedTeamsSection = ({ acceptedTeams }) => {
+  const [acceptedTeamsState, setAcceptedTeams] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
+  useEffect(() => {
+    const fetchAcceptedTeams = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/acceptedTeams");
+        setAcceptedTeams(response.data);
+        console.log("✅ Accepted Teams Updated:", response.data);
+      } catch (error) {
+        console.error("❌ Error fetching accepted teams:", error);
+      }
+    };
 
+    fetchAcceptedTeams();
+  }, [acceptedTeams]); // Update when new teams are accepted
   const handleMeetClick = (team) => {
     setSelectedTeam(team);
     setShowForm(true);
@@ -36,22 +52,24 @@ const AcceptedTeamsSection = ({ acceptedTeams }) => {
     <section className="accepted-section">
       <h2>Accepted Teams</h2>
       <div className="accepted-teams-list">
-        {acceptedTeams.map((team) => (
-          <div key={team.id} className="team-card">
-            <p>
-              <strong>Project:</strong> {team.projectName}
-            </p>
-            <p>
-              <strong>Team:</strong> {team.teamName}
-            </p>
-            <button
-              className="meet-button"
-              onClick={() => handleMeetClick(team)}
-            >
-              Meet
-            </button>
-          </div>
-        ))}
+      {acceptedTeamsState.length === 0 ? (
+  <p>No accepted teams yet.</p>
+) : (
+  acceptedTeamsState.map((team) => (
+    <div key={team._id} className="team-card">
+      <h3>{team.teamName}</h3>
+      <p>{team.projectName}</p>
+      <p>{team.description}</p>
+      <button
+        className="meet-button"
+        onClick={() => handleMeetClick(team)}
+      >
+        Meet
+      </button>
+    </div>
+  ))
+)}
+
       </div>
 
       {/* Pop-up Form */}

@@ -111,3 +111,15 @@ button {
   margin-top: 0.5em;
   z-index: 10;
 }
+.dropdown-list {
+  display: none;
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  list-style: none;
+}
+
+.dropdown:hover .dropdown-list {
+  display: block; /* Show list on hover */
+}

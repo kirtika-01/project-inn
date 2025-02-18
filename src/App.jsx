@@ -10,16 +10,22 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const [requests, setRequests] = useState([
-    { id: 1, projectName: "Project A", teamName: "Team Alpha", description: "Idea A description", teamMembers: ["Alice", "Bob"] },
-    { id: 2, projectName: "Project B", teamName: "Team Beta", description: "Idea B description", teamMembers: ["Charlie", "David"] },
+    { id: 1111, projectName: "Project A", teamName: "Team Alpha", description: "Idea A description", teamMembers: ["Alice", "Bob"] },
+    { id: 2222, projectName: "Project B", teamName: "Team Beta", description: "Idea B description", teamMembers: ["Charlie", "David"] },
   ]);
 
   const [acceptedTeams, setAcceptedTeams] = useState([]);
-
+ // ✅ Function to update accepted teams
+ const updateAcceptedTeams = (newTeam) => {
+  setAcceptedTeams((prev) => [...prev, newTeam]);
+};
   const handleAccept = (id) => {
     const acceptedRequest = requests.find((req) => req.id === id);
     setAcceptedTeams((prev) => [...prev, acceptedRequest]);
-    setRequests(requests.filter((req) => req.id !== id));
+    if (acceptedRequest) {
+      updateAcceptedTeams(acceptedRequest); // ✅ Use updateAcceptedTeams here
+      setRequests(requests.filter((req) => req.id !== id));
+    }
   };
 
   const handleReject = (id) => {
