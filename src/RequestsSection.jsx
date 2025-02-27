@@ -2,117 +2,149 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./RequestsSection.css";
 
-const RequestsSection = ({ requests, onAccept, onReject, onRevise, updateAcceptedTeams }) => {
-  const [acceptedTeams, setAcceptedTeams] = useState([]);
+const RequestsSection = () => {
+  const [requests, setRequests] = useState([]);
 
-  useEffect(() => {
-    console.log("Requests:", requests);
-  }, [requests]);
 
-  // const handleAccept = async (request) => {
-  //   console.log("✅ Request Object:", req); // Debugging output
-  //   console.log("✅ Sending ID:", request.id); // ✅ Ensure ID is being sent
-  //   // if (!req || !req.id) {
-  //   //   console.error("❌ Invalid ID: Request ID is undefined.",req);
-  //   //   return;
-  //   // }
-  //   if (!req) {
-  //     console.error("❌ req is undefined or null");
-  //     return;
-  //   }
+    // Fetch mentor requests from the database
+    useEffect(() => {
+      const fetchRequests = async () => {
+        try {
+          const response = await axios.get("http://localhost:5000/api/mentor-requests");
+          setRequests(response.data);
+        } catch (error) {
+          console.error("Error fetching mentor requests:", error);
+        }
+      };
   
-  //   if (!req.id) {
-  //     console.error("❌ Invalid ID: Request ID is undefined.", req);
-  //     return;
-  //   }
-  
-  //   try {
-  //     // console.log("✅ Sending ID:", id); // Log the ID before making the request
-  //     // await axios.post("http://localhost:5000/api/acceptedTeams/accept", { id }); 
-  //     // console.log(`✅ Team with ID ${id} accepted`);
-  //     // setAcceptedTeams([...acceptedTeams, id]); 
+      fetchRequests();
+    }, []);
 
-  //     const response = await axios.post("http://localhost:5000/api/acceptedTeams/accept", {
-  //       id: request.id, // ✅ Include ID
-  //       teamName: request.teamName,
-  //       projectName: request.projectName,
-  //       description: request.description,
-  //       teamMembers: request.teamMembers,
-  //     });
-  //     console.log("✅ Request accepted:", response.data);
-  //   } catch (error) {
-  //     console.error("❌ Request failed", error);
-  //   }
-  // };
-  const handleAccept = async (request) => {
-    console.log("✅ Request Object:", request); // Debugging output
+ 
+// const handleAccept = async (request) => {
+//   console.log("✅ Request Object:", request); // Debugging output
+//   if (!request || !request._id || !request.projectName || !request.members || !request.projectDescription) {
+//     console.error("❌ Missing required request fields:", request);
+//     return;
+//   }
+//   try {
+//     console.log("✅ Sending Request with ID:", request._id);
 
-    if (!request) {
-        console.error("❌ request is undefined or null");
-        return;
-    }
+//     const response = await axios.post("http://localhost:5000/api/accepted-requests", {
+//       requestId: request._id, // ✅ Ensure ID is included correctly
+//       teamName: request.projectDescription,
+//       projectName: request.projectName,
+//       teamMembers: request.members.map(member => ({
+//         name: member.name})),
+//       description: request.projectDescription,
+//     },{
+//       headers: { "Content-Type": "application/json" }
+//     }
+//   );
 
-    if (!request.id) {
-        console.error("❌ Invalid ID: Request ID is undefined.", request);
-        return;
-    }
+//     console.log("✅ Request accepted:", response.data);
+//     setRequests(requests.filter((req) => req._id !== request._id)); // Remove from UI
 
-    try {
-        console.log("✅ Sending ID:", request.id); // ✅ Ensure ID is being sent
+//   } catch (error) {
+//     console.error("❌ Request failed:", error.response ? error.response.data : error.message);
 
-        const response = await axios.post("http://localhost:5000/api/acceptedTeams/accept", {
-            id: request.id, // ✅ Include ID
-            teamName: request.teamName,
-            projectName: request.projectName,
-            description: request.description,
-            teamMembers: request.teamMembers,
-        });
+//   }
+// };
 
-        console.log("✅ Request accepted:", response.data);
-        // Call `onAccept` to update the accepted teams in App.jsx
-      onAccept(request.id);
-        // Update Accepted Teams Section
-        // updateAcceptedTeams(response.data);
-        
-    } catch (error) {
-        console.error("❌ Request failed", error);
-    }
+
+// console.log("✅ Request accepted:", response.data);
+
+const handleAccept = async (request) => {
+  console.log("✅ Request Object:", request);
+
+  if (!request || !request.projectName || !request.members || !request.projectDescription) {
+      console.error("❌ Missing required request fields:", request);
+      return;
+  }
+
+  // ✅ Auto-generate teamName based on projectName
+  const teamName = `Team_${request.projectName.replace(/\s+/g, '_')}_${Math.floor(Math.random() * 1000)}`;
+console.log("🔹 Generated Team Name:", teamName);
+  try {
+      console.log("📤 Sending Data:", {
+         
+          teamName, // ✅ Auto-generated team name
+          projectName: request.projectName,
+          teamMembers: request.members.map(member => ({
+              name: member.name || "Unknown",
+              rollno: member.rollno || "N/A",
+          })),
+          description: request.projectDescription,
+      });
+
+      const response = await axios.post("http://localhost:5000/api/accepted-requests", {
+          requestId: request._id,
+          teamName, // ✅ Using generated team name
+          projectName: request.projectName,
+          teamMembers: request.members.map(member => ({
+              name: member.name || "Unknown",
+              rollno: member.rollno || "N/A",
+          })),
+          description: request.projectDescription,
+      }, {
+          headers: { "Content-Type": "application/json" }
+      });
+
+      console.log("✅ Request Accepted:", response.data);
+      setRequests(requests.filter((req) => req._id !== request._id)); // Remove from UI
+
+  } catch (error) {
+      console.error("❌ Request failed:", error.response ? error.response.data : error.message);
+  }
 };
-
 
   return (
     <section className="requests-section">
       <h2>Requests</h2>
       <div className="requests-list">
-        {requests.map((req,index) => (
+        {requests.length === 0 ? (
+        <p>No requests available.</p>
+      ) : (
+        requests.map((request) => (
           
-          <div key={index} className="request-item" title={req.description}>
-            <p><strong>Project:</strong> {req.projectName}</p>
-            <p><strong>Team:</strong> {req.teamName}</p>
+          <div key={request._id} className="request-item" >
+            <p><strong>Project:</strong> {request.projectName}</p>
+            <p><strong>Team:</strong> {request.projectDescription}</p>
             <div className="request-buttons">
-            <button onClick={() => {
-  console.log("✅ Request Object:", req); // Debugging output
-  handleAccept(req);
-}} className="accept-button">
+
+<button
+  onClick={() => {
+    console.log("Clicked Accept for:", request);
+
+    if (!request || !request.projectName || !request.members) {
+      console.error("❌ Missing required request fields:", request);
+      return;
+    }
+    
+
+    handleAccept(request);
+  }}
+  className="accept-button"
+>
   Accept
 </button>
-              <button onClick={() => onReject(req._id)} className="reject-button">
+              <button onClick={() => onReject(request._id)} className="reject-button">
                 Reject
               </button>
-              <button onClick={() => onRevise(req._id)} className="revise-button">
+              <button onClick={() => onRevise(request._id)} className="revise-button">
                 Revise
               </button>
               <div className="dropdown">
                 <button className="more-button">More</button>
-                <ul className="dropdown-list">
+                {/* <ul className="dropdown-list">
                   {req.teamMembers.map((member, index) => (
-                    <li key={`${req._id}-${index}`}>{member}</li>
+                    <li key={${request._id}-${index}}>{member}</li>
                   ))}
-                </ul>
+                </ul> */}
               </div>
             </div>
           </div>
-        ))}
+        )))}
       </div>
     </section>
   );

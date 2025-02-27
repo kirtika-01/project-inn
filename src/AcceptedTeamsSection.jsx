@@ -4,14 +4,14 @@ import axios from "axios";
 import "./AcceptedTeamsSection.css";
 
 
-const AcceptedTeamsSection = ({ acceptedTeams }) => {
+const AcceptedTeamsSection = () => {
   const [acceptedTeamsState, setAcceptedTeams] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   useEffect(() => {
     const fetchAcceptedTeams = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/acceptedTeams");
+        const response = await axios.get("http://localhost:5000/api/accepted-requests");
         setAcceptedTeams(response.data);
         console.log("✅ Accepted Teams Updated:", response.data);
       } catch (error) {
@@ -20,7 +20,7 @@ const AcceptedTeamsSection = ({ acceptedTeams }) => {
     };
 
     fetchAcceptedTeams();
-  }, [acceptedTeams]); // Update when new teams are accepted
+  }, []); // Update when new teams are accepted
   const handleMeetClick = (team) => {
     setSelectedTeam(team);
     setShowForm(true);
