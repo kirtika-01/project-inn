@@ -1,20 +1,4 @@
-// import mongoose from "mongoose";  // Change this line
 
-// const acceptedRequestSchema = new mongoose.Schema({
-//   requestId: { type: String, required: true },
-//   teamName: { type: String, required: true },
-//   projectName: { type: String, required: true },
-//   teamMembers: [
-//     {
-//       name: { type: String, required: true },
-//       rollno: { type: String, required: true },
-//     },
-//   ],
-//   description: { type: String, required: true }, // Ensure this is present
-// });
-
-// const AcceptedRequest = mongoose.model("AcceptedRequest", acceptedRequestSchema);
-// export default AcceptedRequest;
 import mongoose from "mongoose";
 
 const acceptedRequestSchema = new mongoose.Schema({

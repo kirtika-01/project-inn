@@ -19,41 +19,6 @@ const RequestsSection = () => {
   
       fetchRequests();
     }, []);
-
- 
-// const handleAccept = async (request) => {
-//   console.log("✅ Request Object:", request); // Debugging output
-//   if (!request || !request._id || !request.projectName || !request.members || !request.projectDescription) {
-//     console.error("❌ Missing required request fields:", request);
-//     return;
-//   }
-//   try {
-//     console.log("✅ Sending Request with ID:", request._id);
-
-//     const response = await axios.post("http://localhost:5000/api/accepted-requests", {
-//       requestId: request._id, // ✅ Ensure ID is included correctly
-//       teamName: request.projectDescription,
-//       projectName: request.projectName,
-//       teamMembers: request.members.map(member => ({
-//         name: member.name})),
-//       description: request.projectDescription,
-//     },{
-//       headers: { "Content-Type": "application/json" }
-//     }
-//   );
-
-//     console.log("✅ Request accepted:", response.data);
-//     setRequests(requests.filter((req) => req._id !== request._id)); // Remove from UI
-
-//   } catch (error) {
-//     console.error("❌ Request failed:", error.response ? error.response.data : error.message);
-
-//   }
-// };
-
-
-// console.log("✅ Request accepted:", response.data);
-
 const handleAccept = async (request) => {
   console.log("✅ Request Object:", request);
 
@@ -97,7 +62,28 @@ console.log("🔹 Generated Team Name:", teamName);
       console.error("❌ Request failed:", error.response ? error.response.data : error.message);
   }
 };
+const handleReject = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/requests/mentor-requests/${id}`, {
 
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" }, // Ensure correct headers
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text(); // Read response as text
+      throw new Error(`Failed to reject request: ${errorText}`);    }
+
+    const data = await response.json(); // ✅ Ensure response is parsed
+    console.log("Request rejected:", data);
+
+    // ✅ Remove the rejected request from UI
+    setRequests(prevRequests => prevRequests.filter(req => req._id !== id));
+
+  } catch (error) {
+    console.error("Error rejecting request:", error);
+  }
+};
   return (
     <section className="requests-section">
       <h2>Requests</h2>
@@ -128,7 +114,7 @@ console.log("🔹 Generated Team Name:", teamName);
 >
   Accept
 </button>
-              <button onClick={() => onReject(request._id)} className="reject-button">
+              <button onClick={() => handleReject(request._id)} className="reject-button">
                 Reject
               </button>
               <button onClick={() => onRevise(request._id)} className="revise-button">
