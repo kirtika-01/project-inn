@@ -122,11 +122,11 @@ const handleReject = async (id) => {
               </button>
               <div className="dropdown">
                 <button className="more-button">More</button>
-                {/* <ul className="dropdown-list">
-                  {req.teamMembers.map((member, index) => (
-                    <li key={${request._id}-${index}}>{member}</li>
-                  ))}
-                </ul> */}
+                <ul className="dropdown-list">
+                {request.members.map((member, index) => (
+      <li key={`${member.name}-${index}`}>{member.name} ({member.rollno})</li>
+    ))}
+                </ul>
               </div>
             </div>
           </div>
