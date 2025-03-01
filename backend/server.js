@@ -6,6 +6,7 @@ import requestRoutes from "./routes/requestRoutes.js"; // Ensure the .js extensi
 import acceptedTeamsRoutes from "./routes/acceptedTeamsRoutes.js"; // Add this import
 import MentorRequest from "./models/MentorRequest.js"; // ✅ Import MentorRequest model
 import AcceptedTeam from "./models/AcceptedRequest.js"; // ✅ Import AcceptedTeam model
+import reviseRequestRoutes from "./routes/reviseRequestRoutes.js"; // ✅ Updated import
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Required for form data
 app.use("/api/requests", requestRoutes);
 app.use("/api/accepted-requests", acceptedTeamsRoutes); // ✅ Add this line
-
+app.use("/api/revised-requests", reviseRequestRoutes);
 // ✅ ADD THIS ROUTE JUST BEFORE app.listen
 app.get("/api/mentor-requests", async (req, res) => {
   try {

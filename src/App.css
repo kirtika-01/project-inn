@@ -45,6 +45,7 @@ body, html {
   flex-direction: column;
   gap: 1em;
   padding-top: 100px;
+  margin-top: 500px;
 }
 
 .requests-section, .accepted-section {
@@ -59,6 +60,12 @@ body, html {
   overflow-y: auto;
   max-width: calc(100% - 20px);
   flex-basis: 48%; /* For equal width on larger screens */
+}
+/* scroll feature */
+.requests-section {
+  margin-top: 20px; /* ✅ Add some margin so it doesn’t touch the header */
+  max-height: calc(100vh - 140px); /* ✅ Adjust max height to prevent overflow */
+  overflow-y: auto;
 }
 
 .request-item {

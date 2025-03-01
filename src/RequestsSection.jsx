@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./RequestsSection.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const RequestsSection = () => {
   const [requests, setRequests] = useState([]);
@@ -84,6 +87,31 @@ const handleReject = async (id) => {
     console.error("Error rejecting request:", error);
   }
 };
+const handleRevise = async (request) => {
+  try {
+    // 1️⃣ Send request data to the new "reviserequests" collection
+    const response = await axios.post("http://localhost:5000/api/revised-requests", {
+      projectName: request.projectName,
+      teamMembers: request.members.map(member => ({
+        name: member.name || "Unknown",
+        rollno: member.rollno || "N/A",
+      })),
+      description: request.projectDescription,
+    }, {
+      headers: { "Content-Type": "application/json" }
+    });
+
+    console.log("✅ Request moved to revise-requests:", response.data);
+     // Show success toast notification
+     toast.success("Revise request sent to student dashboard");
+    // 2️⃣ Update UI to remove the request
+    setRequests(prevRequests => prevRequests.filter(req => req._id !== request._id));
+
+  } catch (error) {
+    console.error("❌ Error revising request:", error.response ? error.response.data : error.message);
+  }
+};
+
   return (
     <section className="requests-section">
       <h2>Requests</h2>
@@ -117,7 +145,7 @@ const handleReject = async (id) => {
               <button onClick={() => handleReject(request._id)} className="reject-button">
                 Reject
               </button>
-              <button onClick={() => onRevise(request._id)} className="revise-button">
+              <button onClick={() => handleRevise(request)} className="revise-button">
                 Revise
               </button>
               <div className="dropdown">

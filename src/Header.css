@@ -15,10 +15,11 @@
   justify-content: flex-end;
   align-items: center;
   padding: 1em;
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 1000;
   width: 100%;
+  height: 60px; /* Ensure header height is fixed */
 }
 
 .dashboard-header-text {

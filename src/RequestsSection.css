@@ -1,17 +1,27 @@
 .requests-section {
   background: #e0f7fa;
-  padding: 1.5em;
+  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow-y: visible;
   width: 100%;
   margin: 1em auto 1em 1em;
   max-width: calc(100% - 20px);
+  margin-top: 200px; /* Adjust this based on your top bar's height */
+  position: relative; /* Ensure it doesn't get overlapped */
+
+}
+body {
+  overflow-y: auto;
+  padding-top: 60px; /* Ensure content starts below the top bar */
+}
+.requests-section{
+  position: relative;
   margin-top: 100px;
 }
-.requests-list{
+/* .requests-list{
   margin-top: 200px;
-}
+} */
 .request-item {
   color: black;
   display: flex;
