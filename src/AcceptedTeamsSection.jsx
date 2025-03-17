@@ -26,28 +26,51 @@ const AcceptedTeamsSection = () => {
     setShowForm(true);
   };
 
-  const handleFormSubmit = (event) => {
+    
+    const handleFormCancel = () => {
+      setShowForm(false);
+  };
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const date = formData.get("date");
     const workDescription = formData.get("workDescription");
     const grade = formData.get("grade");
-
-    console.log("Form Data:", {
-      team: selectedTeam,
+    const mentorName = formData.get("mentorName");
+    const teamMembersPresent = formData.get("teamMembersPresent");
+    const memberNames = formData.get("memberNames").split(",").map(name => name.trim());
+  
+    const meetData = {
+      teamId: selectedTeam._id,
+      teamName: selectedTeam.teamName,
+      mentorName,
       date,
-      workDescription,
-      grade,
-    });
-
+      description: workDescription,
+      teamMembersPresent,
+      teamMemberNames: memberNames,
+      grade
+    };
+  
+    console.log("📥 Sending Meeting Data:", meetData);
+  
+    try {
+      const response = await axios.post("http://localhost:5000/api/mentormeets", meetData);
+  
+      if (response.status === 201) {
+        console.log("✅ Mentor Meet Successfully Saved:", response.data);
+        alert("Meeting Scheduled Successfully!");
+      } else {
+        console.error("❌ Error scheduling meeting:", response.data);
+      }
+    } catch (error) {
+      console.error("❌ API Error:", error);
+    }
+  
     // Close the form after submission
     setShowForm(false);
-    };
-    
-    const handleFormCancel = () => {
-      setShowForm(false);
   };
-
+  
+  
   return (
     <section className="accepted-section">
       <h2>Accepted Teams</h2>
@@ -79,11 +102,20 @@ const AcceptedTeamsSection = () => {
             <span className="close-btn"  aria-label="Close form" onClick={() => setShowForm(false)}>
               &times;
             </span>
-            <h3>Schedule Meeting for {selectedTeam.teamName}</h3>
+            <h3>Scheduled Meeting for {selectedTeam.teamName}</h3>
             <form onSubmit={handleFormSubmit}>
+              {/* Team id */}
+              <input type="text" name="teamId" value={selectedTeam._id} disabled/>
+              
+            {/* Team Name Field */}
+            <label>Team Name:</label>
+            <input type="text" value={selectedTeam.teamName} disabled />
                {/* Date Field */}
         <label htmlFor="date">Date:</label>
         <input type="date" id="date" name="date" required />
+         {/* Mentor Name Field */}
+         <label htmlFor="mentorName">Mentor Name:</label>
+              <input type="text" id="mentorName" name="mentorName" required />
 
         {/* Work Description Field */}
         <label htmlFor="workDescription">Work Description:</label>
@@ -92,6 +124,19 @@ const AcceptedTeamsSection = () => {
           name="workDescription"
           required
         ></textarea>
+{/* Number of Team Members Present */}
+<label htmlFor="teamMembersPresent">No. of Team Members Present:</label>
+              <select id="teamMembersPresent" name="teamMembersPresent" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+
+              {/* Team Members Present Names */}
+              <label htmlFor="memberNames">Team Members Present (Names):</label>
+              <input type="text" id="memberNames" name="memberNames" placeholder="Enter names separated by commas" required />
 
 
         {/* Grade Field */}

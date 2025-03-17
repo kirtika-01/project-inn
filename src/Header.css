@@ -50,14 +50,14 @@
 }
 
 .calendar-icon {
-  font-size: 1.5em;
+  font-size: 1.8em;
   cursor: pointer;
   color: white;
 }
 
 .calendar-popup {
   position: absolute;
-  top: 2.5em;
+  top: 40px;
   right: 0;
   background: white;
   padding: 10px;
@@ -141,4 +141,53 @@
   transform: translateX(-50%);
   white-space: nowrap;
   font-size: 0.8em;
+}
+/* Profile Styles */
+.profile-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  font-size: 1.8em;
+  cursor: pointer;
+  color: white;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: rgb(176, 174, 174);
+  color: black;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  text-align: left;
+  font-size: 14px;
+  z-index: 1000;
+  text-align: center;
+}
+
+.profile-dropdown p {
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+/* Logout Button */
+.logout-button {
+  margin-left: 15px;
+  padding: 0.4em 1.2em;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.logout-button:hover {
+  background: #d43f3f;
 }

@@ -16,7 +16,7 @@
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: 600px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -136,4 +136,32 @@
   to {
     opacity: 1;
   }
+}
+/* new changes for form */
+.popup-form input,
+.popup-form textarea,
+.popup-form select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.popup-form textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.popup-form button {
+  background-color: #004d99;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-form button:hover {
+  background-color: #003366;
 }

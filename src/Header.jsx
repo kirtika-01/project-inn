@@ -3,13 +3,21 @@ import './Header.css';
 import Sidebar from "./Sidebar";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { FaCalendarAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaUserCircle  } from "react-icons/fa";
 
 const Header = ({ onLogout }) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [events, setEvents] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventText, setEventText] = useState("");
+  const [showProfile, setShowProfile] = useState(false);
+
+  const mentorData = {
+    id: "M12345",
+    name: "John Doe",
+    email: "johndoe@example.com",
+    expertise: "AI /ML",
+  };
 
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar);
@@ -60,6 +68,21 @@ const Header = ({ onLogout }) => {
           </div>
         )}
       </div>
+      {/* Profile Icon */}
+      <div className="profile-container">
+          <FaUserCircle className="icon profile-icon" onClick={() => setShowProfile(!showProfile)} />
+
+          {/* Profile Dropdown */}
+          {showProfile && (
+            <div className="profile-dropdown">
+              <p><strong>ID:</strong> {mentorData.id}</p>
+              <p><strong>Name:</strong> {mentorData.name}</p>
+              <p><strong>Email:</strong> {mentorData.email}</p>
+              <p><strong>Expertise:</strong> {mentorData.expertise}</p>
+            </div>
+          )}
+        </div>
+
       <button className="logout-button" onClick={onLogout}>Logout</button>
     </header>
   );
