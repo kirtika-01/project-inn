@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Header.css';
 import Sidebar from "./Sidebar";
 import Calendar from "react-calendar";
@@ -11,13 +11,14 @@ const Header = ({ onLogout }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventText, setEventText] = useState("");
   const [showProfile, setShowProfile] = useState(false);
+  const [mentorData, setMentorData] = useState(null);
 
-  const mentorData = {
-    id: "M12345",
-    name: "John Doe",
-    email: "johndoe@example.com",
-    expertise: "AI /ML",
-  };
+  useEffect(() => {
+    const storedMentor = localStorage.getItem("mentor");
+    if (storedMentor) {
+      setMentorData(JSON.parse(storedMentor)); // Retrieve mentor data from localStorage
+    }
+  }, []);
 
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar);
@@ -73,7 +74,7 @@ const Header = ({ onLogout }) => {
           <FaUserCircle className="icon profile-icon" onClick={() => setShowProfile(!showProfile)} />
 
           {/* Profile Dropdown */}
-          {showProfile && (
+          {showProfile && mentorData && (
             <div className="profile-dropdown">
               <p><strong>ID:</strong> {mentorData.id}</p>
               <p><strong>Name:</strong> {mentorData.name}</p>

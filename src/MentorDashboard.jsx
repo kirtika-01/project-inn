@@ -63,10 +63,13 @@ const MentorDashboard = () => {
     toast.success("Revise request sent to student dashboard");
     setRequests(requests.filter((req) => req._id !== id));
   };
-
-  const handleLogout = () => {
-    toast.success("Logged out successfully");
-  };
+// Logout Functionality
+const handleLogout = () => {
+  localStorage.removeItem("token"); // Remove token
+  localStorage.removeItem("mentor"); // Remove mentor data
+  toast.success("Logged out successfully");
+  navigate("/login"); // Redirect to login page
+};
 
   return (
     <div className="dashboard-container">

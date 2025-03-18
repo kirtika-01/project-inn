@@ -10,12 +10,13 @@ const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
-
+  const dropdownRef = useRef(null); // Ref for dropdown
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleDropdown = () => {
+  const handleDropdown = (e) => {
+    e.stopPropagation(); // Prevent event bubbling
     setIsDropdownOpen(!isDropdownOpen);
   };
 
@@ -40,7 +41,9 @@ const Sidebar = () => {
         isSidebarOpen &&
         sidebarRef.current &&
         !sidebarRef.current.contains(event.target) &&
-        !event.target.closest(".navbar-icon")
+        !event.target.closest(".navbar-icon")&&
+        !event.target.closest(".dropdown") // Prevent closing when clicking inside dropdown
+      
       ) {
         setIsSidebarOpen(false);
       }
@@ -85,9 +88,13 @@ const Sidebar = () => {
 
         <button className="sidebar-btn" onClick={handleHomeClick}>Home</button>  
 
-        <Link to="/evaluation-panel" className="sidebar-btn-link">
-          <button className="sidebar-btn">Evaluation Panel</button>
-        </Link>
+        {/* <Link to="/evaluation-panel" className="sidebar-btn-link">
+          <button className="sidebar-btn">Evaluation Panel</button> */}
+        {/* </Link> */}
+        <button className="sidebar-btn" onClick={() => navigate("/mentor-dashboard/evaluation-panel")}>
+  Evaluation Panel
+</button>
+
       </div>
     </>
   );
