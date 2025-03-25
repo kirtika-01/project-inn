@@ -5,11 +5,11 @@ const RevisedRequestSchema = new mongoose.Schema({
   teamMembers: [
     {
       name: { type: String, required: true },
-      rollno: { type: String, required: true },
+      rollNo: { type: String, required: true },
     }
   ],
   description: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
 });
 
 const RevisedRequest = mongoose.model("RevisedRequest", RevisedRequestSchema);

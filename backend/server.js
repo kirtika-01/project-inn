@@ -21,20 +21,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Required for form data
 // Routes
-app.use("/api/requests", requestRoutes);
+// app.use("/api/requests", requestRoutes);
+// server.js
+app.use("/api/mentor-requests", requestRoutes);
+
 app.use("/api/accepted-requests", acceptedTeamsRoutes); // ✅ Add this line
 app.use("/api/revised-requests", reviseRequestRoutes);
 app.use("/api/mentormeets", mentormeetRoutes); // ✅ Add MentorMeet route
 app.use("/api/auth", authRoutes);
 // ✅ Fetch Mentor Requests
-app.get("/api/mentor-requests", async (req, res) => {
-  try {
-    const mentorRequests = await MentorRequest.find(); // Ensure the model is correct
-    res.json(mentorRequests);
-  } catch (error) {
-    res.status(500).json({ message: "Server Error", error });
-  }
-});
+
 // ✅ Store Accepted Requests
 app.post("/api/accepted-requests", async (req, res) => {
   console.log("📥 Received data:", req.body); // Debugging step

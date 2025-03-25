@@ -12,12 +12,40 @@ import "./MentorDashboard.css";
 const MentorDashboard = () => {
   const [requests, setRequests] = useState([]);
   const [acceptedTeams, setAcceptedTeams] = useState([]);
+  const [mentor, setMentor] = useState(null); // ✅ Store mentor object
   const navigate = useNavigate(); // ✅ Added useNavigate()
+  console.log("Mentor from LocalStorage:", JSON.parse(localStorage.getItem("mentor")));
+  useEffect(() => {
+    console.log("MentorDashboard mounted!");
+  }, []);
+  
+  useEffect(() => {
+    const storedMentor = JSON.parse(localStorage.getItem("mentor"));
+    if (storedMentor) {
+      setMentor(storedMentor);
+    } else {
+      toast.error("Mentor not logged in!");
+      navigate("/login"); // Redirect to login if no mentor found
+    }
+  }, [navigate]);
 
   useEffect(() => {
+    if (mentor?.id) {
+      console.log("Mentor ID:", mentor.id);
+      fetchRequests();
+      fetchAcceptedTeams();
+    }
+  }, [mentor]); // ✅ Only fetch after mentor is available
     const fetchRequests = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/mentor-requests");
+        if (!mentor?.id) {
+          console.warn("⚠️ No Mentor ID Found");
+          return;
+        }
+        console.log("🆔 Mentor ID from state:", mentor?.id);
+
+        const response = await axios.get(`http://localhost:5000/api/mentor-requests/${mentor.id}`);
+        console.log("Fetched Requests:", response.data);
         setRequests(response.data);
       } catch (error) {
         console.error("Error fetching mentor requests:", error);
@@ -31,9 +59,6 @@ const MentorDashboard = () => {
         console.error("❌ Error fetching accepted teams:", error.response?.data || error.message);
       }
     };
-    fetchRequests();
-    fetchAcceptedTeams();
-  }, []);
 
   const handleAccept = async (id) => {
     try {
@@ -83,13 +108,10 @@ const handleLogout = () => {
             path="/" 
             element={
               <>
-                {requests.length > 0 ? (
-                  <RequestsSection requests={requests} onAccept={handleAccept} onReject={handleReject} onRevise={handleRevise} />
-                ) : (
-                  <div className="accepted-section full-width">
-                    <AcceptedTeamsSection acceptedTeams={acceptedTeams} />
-                  </div>
-                )}
+                <RequestsSection mentor={mentor} 
+                 requests={requests}
+                 setRequests={setRequests}/>
+
                 {requests.length > 0 && (
                   <div className="accepted-section">
                     <AcceptedTeamsSection acceptedTeams={acceptedTeams} />

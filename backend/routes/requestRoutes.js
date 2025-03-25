@@ -5,9 +5,10 @@ import AcceptedRequest from "../models/AcceptedRequest.js";
 const router = express.Router();
 
 // ✅ Get all mentor requests
-router.get("/mentor-requests", async (req, res) => {
+router.get("/:mentorId", async (req, res) => {
+  const { mentorId } = req.params;
   try {
-    const requests = await MentorRequest.find({});
+    const requests = await MentorRequest.find({ mentorId });
     console.log("Fetched Requests:", requests);
 
     res.json(requests.map(req => ({
@@ -50,21 +51,34 @@ router.post("/accepted-requests", async (req, res) => {
   }
 });
 // ✅ Route to delete a mentor request (Reject Request)
-router.delete("/mentor-requests/:id", async (req, res) => {
+// router.delete("/mentor-requests/:id", async (req, res) => {
+//   try {
+//     const requestId = req.params.id;
+
+//     // Check if the request exists before deleting
+//     const deletedRequest = await MentorRequest.findByIdAndDelete(requestId);
+
+//     if (!deletedRequest) {
+//       return res.status(404).json({ message: "Request not found" }); // ✅ Ensure JSON response
+//     }
+
+//     return res.status(200).json({ message: "Request rejected successfully" }); // ✅ Ensure JSON response
+//   } catch (error) {
+//     console.error("Error rejecting request:", error);
+//     return res.status(500).json({ message: "Error rejecting request", error }); // ✅ Ensure JSON response
+//   }
+// });
+// DELETE request by projectName
+router.delete("/:projectName", async (req, res) => {
+  const { projectName } = req.params;
   try {
-    const requestId = req.params.id;
-
-    // Check if the request exists before deleting
-    const deletedRequest = await MentorRequest.findByIdAndDelete(requestId);
-
+    const deletedRequest = await MentorRequest.findOneAndDelete({ projectName });
     if (!deletedRequest) {
-      return res.status(404).json({ message: "Request not found" }); // ✅ Ensure JSON response
+      return res.status(404).json({ message: "Request not found" });
     }
-
-    return res.status(200).json({ message: "Request rejected successfully" }); // ✅ Ensure JSON response
+    res.status(200).json({ message: "Request deleted successfully" });
   } catch (error) {
-    console.error("Error rejecting request:", error);
-    return res.status(500).json({ message: "Error rejecting request", error }); // ✅ Ensure JSON response
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
