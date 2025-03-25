@@ -12,7 +12,7 @@ import authRoutes from "./routes/authRoutes.js";
 // Import Models
 import MentorRequest from "./models/MentorRequest.js"; // ✅ Import MentorRequest model
 import AcceptedTeam from "./models/AcceptedRequest.js"; // ✅ Import AcceptedTeam model
-
+import panelRoutes from "./routes/PanelRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -29,6 +29,7 @@ app.use("/api/accepted-requests", acceptedTeamsRoutes); // ✅ Add this line
 app.use("/api/revised-requests", reviseRequestRoutes);
 app.use("/api/mentormeets", mentormeetRoutes); // ✅ Add MentorMeet route
 app.use("/api/auth", authRoutes);
+app.use("/api/panels", panelRoutes);
 // ✅ Fetch Mentor Requests
 
 // ✅ Store Accepted Requests

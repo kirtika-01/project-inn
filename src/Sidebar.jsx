@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
+import axios from "axios";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState([]);
+  const [isInPanel, setIsInPanel] = useState(false); // ✅ Check if mentor is in panel
 
   const location = useLocation();
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
   const dropdownRef = useRef(null); // Ref for dropdown
+
+  const mentor = JSON.parse(localStorage.getItem("mentor")); // ✅ Get current mentor
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -33,6 +38,29 @@ const Sidebar = () => {
       navigate("/");
     }
   };
+  // Fetch panel data to check if mentor is part of any panel
+  const checkPanelMembership = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/panels");
+      const panels = response.data;
+      const mentorId = mentor?.id;
+
+      // Check if mentorId exists in any panel's teacher_ids
+      const isInPanel = panels.some((panel) =>
+        panel.teacher_ids.includes(mentorId)
+      );
+      setIsInPanel(isInPanel);
+      console.log("Is Mentor in Panel?", isInPanel);
+    } catch (error) {
+      console.error("Error fetching panels:", error);
+    }
+  };
+// Fetch on component mount
+useEffect(() => {
+  if (mentor?.id) {
+    checkPanelMembership();
+  }
+}, [mentor]);
 
   // Close sidebar when clicking outside
   useEffect(() => {
@@ -91,10 +119,20 @@ const Sidebar = () => {
         {/* <Link to="/evaluation-panel" className="sidebar-btn-link">
           <button className="sidebar-btn">Evaluation Panel</button> */}
         {/* </Link> */}
-        <button className="sidebar-btn" onClick={() => navigate("/mentor-dashboard/evaluation-panel")}>
+        {/* <button className="sidebar-btn" onClick={() => navigate("/mentor-dashboard/evaluation-panel")}>
   Evaluation Panel
-</button>
+</button> */}
 
+          {/* Evaluation Panel Button - Conditionally Enabled */}
+          <button
+          className={`sidebar-btn ${isInPanel ? "" : "disabled"}`}
+          onClick={() =>
+            isInPanel && navigate("/mentor-dashboard/evaluation-panel")
+          }
+          disabled={!isInPanel}
+        >
+          Evaluation Panel
+        </button>
       </div>
     </>
   );
