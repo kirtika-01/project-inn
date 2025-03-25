@@ -5,19 +5,15 @@ import MentorRequest from "../models/MentorRequest.js";
 const router = express.Router();
 
 // ✅ Route to accept a team and save it to the database
-router.post("/accepted-requests", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const {teamName, projectName, description, teamMembers} = req.body;
+    const {teamName, projectName, description, teamMembers, mentorId, mentorName} = req.body;
 
-    if (!teamName || !projectName) {
+    if (!teamName || !projectName|| !mentorId || !mentorName) {
       return res.status(400).json({ error: "Missing required fields" });
     }
- // Ensure requestId is a valid ObjectId
- if (!mongoose.Types.ObjectId.isValid(requestId)) {
-  return res.status(400).json({ error: "Invalid request ID format" });
-}
     // Check if the team already exists in the accepted collection
-    const existingTeam = await AcceptedTeam.findOne({ requestId });
+    const existingTeam = await AcceptedTeam.findOne({projectName});
     if (existingTeam) {
       return res.status(409).json({ error: "Team is already accepted" });
     }
@@ -28,15 +24,17 @@ router.post("/accepted-requests", async (req, res) => {
       projectName,
       description,
       teamMembers: teamMembers || [],
+      mentorId,
+      mentorName,
       acceptedAt: new Date(), // ✅ Store the acceptance date
     });
 
     await acceptedTeam.save();
-    const mentorRequest = await MentorRequest.findById(requestId); // Remove from mentor requests
-    if (mentorRequest) {
-      await MentorRequest.findByIdAndDelete(requestId); // Remove from mentor requests
-    }
-
+    //  // ✅ Delete the corresponding mentor request by projectName
+    //  const deletedRequest = await MentorRequest.findOneAndDelete({ projectName });
+    //  if (!deletedRequest) {
+    //    console.warn(`⚠️ No mentor request found for project: ${projectName}`);
+    //  }
     res.status(201).json({ message: "Team accepted successfully", acceptedTeam });
   } catch (error) {
     console.error("❌ Error accepting team:", error);

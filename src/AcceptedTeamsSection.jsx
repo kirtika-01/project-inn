@@ -4,7 +4,7 @@ import axios from "axios";
 import "./AcceptedTeamsSection.css";
 
 
-const AcceptedTeamsSection = () => {
+const AcceptedTeamsSection = ({ acceptedTeams }) => {
   const [acceptedTeamsState, setAcceptedTeams] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
@@ -69,7 +69,6 @@ const AcceptedTeamsSection = () => {
     // Close the form after submission
     setShowForm(false);
   };
-  
   
   return (
     <section className="accepted-section">

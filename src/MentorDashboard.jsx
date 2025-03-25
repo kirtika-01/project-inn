@@ -18,7 +18,11 @@ const MentorDashboard = () => {
   useEffect(() => {
     console.log("MentorDashboard mounted!");
   }, []);
-  
+   // Function to handle adding new accepted team
+   const handleTeamAccepted = (newTeam) => {
+    console.log("📥 Adding new team to state:", newTeam);
+    setAcceptedTeams((prevTeams) => [newTeam, ...prevTeams]);
+  };
   useEffect(() => {
     const storedMentor = JSON.parse(localStorage.getItem("mentor"));
     if (storedMentor) {

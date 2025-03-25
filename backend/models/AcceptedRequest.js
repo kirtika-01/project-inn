@@ -12,6 +12,8 @@ const acceptedRequestSchema = new mongoose.Schema({
     },
   ],
   description: { type: String, required: true },
+  mentorId: { type: mongoose.Schema.Types.ObjectId, ref: "Mentor", required: true },
+  mentorName: { type: String, required: true },
 }, { timestamps: true }); // ✅ Added timestamps for createdAt & updatedAt
 
 const AcceptedRequest = mongoose.model("AcceptedRequest", acceptedRequestSchema);

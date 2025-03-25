@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const RequestsSection = ({ mentor }) => {
+const RequestsSection = ({ mentor ,onTeamAccepted}) => {
   console.log("✅ RequestSection mounted!");
 
   const [requests, setRequests] = useState([]);
@@ -37,7 +37,7 @@ const handleAccept = async (request) => {
   console.log("✅ Request Object:", request);
 
   if (!request || !request.projectName || !request.teamMembers || !request.description||
-    !Array.isArray(request.teamMembers)) {
+    !Array.isArray(request.teamMembers) || !mentor) {
       console.error("❌ Missing required request fields:", request);
       return;
   }
@@ -48,7 +48,7 @@ const handleAccept = async (request) => {
 console.log("🔹 Generated Team Name:", teamName);
   try {
       console.log("📤 Sending Data:", {
-         
+        requestId: request._id,
           teamName, // ✅ Auto-generated team name
           projectName: request.projectName,
           teamMembers: request.teamMembers.map((member) => ({
@@ -56,6 +56,8 @@ console.log("🔹 Generated Team Name:", teamName);
               rollNo: member.rollNo || "N/A",
           })),
           description: request.description,
+          mentorId: mentor.id,
+          mentorName: mentor.name,
       });
 
       const response = await axios.post("http://localhost:5000/api/accepted-requests", {
@@ -67,11 +69,16 @@ console.log("🔹 Generated Team Name:", teamName);
               rollNo: member.rollNo || "N/A",
           })),
           description: request.description,
+          mentorId: mentor.id,
+          mentorName: mentor.name,
       }, {
           headers: { "Content-Type": "application/json" }
       });
 
       console.log("✅ Request Accepted:", response.data);
+      // ✅ Pass the new accepted team to AcceptedTeamsSection
+      // Update the parent state immediately
+      onTeamAccepted(acceptedTeam);
       // ✅ Step 2: Delete from mentorrequests collection
     await axios.delete(`http://localhost:5000/api/mentor-requests/${request.projectName}`);
     console.log("🗑️ Request deleted from mentorrequests.");
@@ -79,6 +86,10 @@ console.log("🔹 Generated Team Name:", teamName);
       // setRequests((prevRequests) => prevRequests.filter((req) => req._id !== request._id));
       // 🔍 Refetch updated requests after acceptance
     await fetchRequests();
+ // ✅ Immediately notify AcceptedTeamsSection to update
+ if (props.onTeamAccepted) {
+  props.onTeamAccepted(response.data.acceptedTeam);
+}
 
   } catch (error) {
       console.error("❌ Request failed:", error.response ? error.response.data : error.message);
