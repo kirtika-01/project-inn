@@ -4,7 +4,7 @@ import axios from "axios";
 import "./AcceptedTeamsSection.css";
 
 
-const AcceptedTeamsSection = ({ acceptedTeams }) => {
+const AcceptedTeamsSection = ({ mentor }) => {
   const [acceptedTeamsState, setAcceptedTeams] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
@@ -12,15 +12,19 @@ const AcceptedTeamsSection = ({ acceptedTeams }) => {
     const fetchAcceptedTeams = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/accepted-requests");
-        setAcceptedTeams(response.data);
-        console.log("✅ Accepted Teams Updated:", response.data);
+        //Filter teams by mentorId
+        const filteredTeams = response.data.filter(
+          (team) => team.mentorId === mentor.id
+        );
+        setAcceptedTeams(filteredTeams);
+        console.log("✅ Accepted Teams Updated:", filteredTeams);
       } catch (error) {
         console.error("❌ Error fetching accepted teams:", error);
       }
     };
 
     fetchAcceptedTeams();
-  }, []); // Update when new teams are accepted
+  }, [mentor.id]); // Update when new teams are accepted
   const handleMeetClick = (team) => {
     setSelectedTeam(team);
     setShowForm(true);

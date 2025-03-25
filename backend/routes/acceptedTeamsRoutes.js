@@ -43,8 +43,19 @@ router.post("/", async (req, res) => {
 });
 // ✅ Define the route to fetch accepted teams
 router.get("/", async (req, res) => {
+  const { mentorId } = req.query; // Extract mentorId from query params
+
   try {
-    const acceptedTeams = await AcceptedTeam.find().sort({ acceptedAt: -1 }); // Sort by latest accepted first
+    let query = {};
+    
+    // If mentorId is provided, filter results
+    if (mentorId) {
+      query.mentorId = mentorId;
+    }
+    const acceptedTeams = await AcceptedTeam.find(query).sort({ acceptedAt: -1 }); // Sort by latest accepted first
+    if (acceptedTeams.length === 0) {
+      return res.status(404).json({ message: "No accepted teams found." });
+    }
     res.json(acceptedTeams);
   } catch (error) {
     console.error("❌ Error fetching accepted teams:", error);

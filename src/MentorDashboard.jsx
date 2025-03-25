@@ -118,7 +118,7 @@ const handleLogout = () => {
 
                 {requests.length > 0 && (
                   <div className="accepted-section">
-                    <AcceptedTeamsSection acceptedTeams={acceptedTeams} />
+                    <AcceptedTeamsSection mentor={mentor} />
                   </div>
                 )}
               </>
