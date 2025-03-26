@@ -10,6 +10,8 @@ import reviseRequestRoutes from "./routes/reviseRequestRoutes.js"; // ✅ Update
 import mentormeetRoutes from "./routes/mentormeet.js";
 import authRoutes from "./routes/authRoutes.js";
 import evaluationRoutes from "./routes/evaluationRoutes.js";
+import marksRoutes from "./routes/marksRoutes.js";
+
 
 
 // Import Models
@@ -34,6 +36,7 @@ app.use("/api/mentormeets", mentormeetRoutes); // ✅ Add MentorMeet route
 app.use("/api/auth", authRoutes);
 app.use("/api/panels", panelRoutes);
 app.use("/api/evaluation", evaluationRoutes);
+app.use("/api/marks", marksRoutes);
 // ✅ Fetch Mentor Requests
 
 // ✅ Store Accepted Requests

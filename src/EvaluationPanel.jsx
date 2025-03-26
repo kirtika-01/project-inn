@@ -12,20 +12,20 @@ const EvaluationPanel = () => {
   useEffect(() => {
     const fetchAssignedTeams = async () => {
       try {
-        const token = localStorage.getItem("token"); // Ensure mentor is authenticated
+        const token = localStorage.getItem("token"); 
         console.log("Token from localStorage:", token);
         if (!token) {
           console.error("No token found, please log in again.");
           return;
         }
         const response = await axios.get("http://localhost:5000/api/evaluation", {
-          headers: { Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-         },
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
         console.log("Assigned Teams Response:", response.data);
         setTeams(response.data.teams || []);
-        // setTeams(response.data?.teams || []);
       } catch (error) {
         console.error("Error fetching assigned teams:", error);
       }
@@ -51,31 +51,55 @@ const EvaluationPanel = () => {
     }));
   };
 
-  const isEvaluation1Complete = (teamId) =>
-    teams
-      .find((team) => team._id === teamId)
-      .teamMembers.every(
-        (member) =>
-          evaluations[teamId]?.[member.enrollmentNumber]?.evaluation1?.trim() !== ""
+  const handleEvaluation1Submit = async (teamId, rollNo) => {
+    const marks = evaluations[teamId]?.[rollNo]?.evaluation1;
+    if (!marks) {
+      alert("Please enter marks for Evaluation 1.");
+      return;
+    }
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:5000/api/marks/submit-eval1",
+        {
+          rollNo,
+          teamId,
+          evalMarks1: parseInt(marks, 10),
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
-  const isEvaluation2Complete = (teamId) =>
-    teams
-      .find((team) => team._id === teamId)
-      .teamMembers.every(
-        (member) =>
-          evaluations[teamId]?.[member.enrollmentNumber]?.evaluation2?.trim() !== ""
-      );
-
-  const handleEvaluation1Submit = (teamId) => {
-    console.log(`Evaluation 1 Data for ${teamId}:`, evaluations[teamId]);
-    setIsEvaluation1Submitted(true);
-    alert(`Evaluation 1 submitted for Team ${teamId}`);
+      console.log(response.data.message);
+      setIsEvaluation1Submitted(true);
+      alert(`Evaluation 1 submitted for ${rollNo}`);
+    } catch (error) {
+      console.error("Error submitting Evaluation 1:", error.response.data);
+      alert("Failed to submit Evaluation 1.");
+    }
   };
 
-  const handleEvaluation2Submit = (teamId) => {
-    console.log(`Evaluation 2 Data for ${teamId}:`, evaluations[teamId]);
-    alert(`Evaluation 2 submitted for Team ${teamId}`);
+  const handleEvaluation2Submit = async (teamId, rollNo) => {
+    const marks = evaluations[teamId]?.[rollNo]?.evaluation2;
+    if (!marks) {
+      alert("Please enter marks for Evaluation 2.");
+      return;
+    }
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:5000/api/marks/submit-eval2",
+        {
+          rollNo,
+          teamId,
+          evalMarks2: parseInt(marks, 10),
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(response.data.message);
+      alert(`Evaluation 2 submitted for ${rollNo}`);
+    } catch (error) {
+      console.error("Error submitting Evaluation 2:", error.response.data);
+      alert("Failed to submit Evaluation 2.");
+    }
   };
 
   return (
@@ -102,7 +126,9 @@ const EvaluationPanel = () => {
                       <tr>
                         <th>Roll No</th>
                         <th>Evaluation 1</th>
+                        <th>Submit</th>
                         <th>Evaluation 2</th>
+                        <th>Submit</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -128,6 +154,24 @@ const EvaluationPanel = () => {
                             />
                           </td>
                           <td>
+                            <button
+                              className="submit-btn"
+                              onClick={() =>
+                                handleEvaluation1Submit(
+                                  team._id,
+                                  member.enrollmentNumber
+                                )
+                              }
+                              disabled={
+                                !evaluations[team._id]?.[
+                                  member.enrollmentNumber
+                                ]?.evaluation1
+                              }
+                            >
+                              Submit
+                            </button>
+                          </td>
+                          <td>
                             <input
                               type="number"
                               placeholder="Marks"
@@ -143,42 +187,33 @@ const EvaluationPanel = () => {
                                   e.target.value
                                 )
                               }
-                              disabled={!isEvaluation1Submitted}
+                              disabled={
+                                !evaluations[team._id]?.[
+                                  member.enrollmentNumber
+                                ]?.evaluation1
+                              }
                             />
+                          </td>
+                          <td>
+                            <button
+                              className="submit-btn"
+                              onClick={() =>
+                                handleEvaluation2Submit(
+                                  team._id,
+                                  member.enrollmentNumber
+                                )
+                              }
+                              disabled={
+                                !evaluations[team._id]?.[
+                                  member.enrollmentNumber
+                                ]?.evaluation2
+                              }
+                            >
+                              Submit
+                            </button>
                           </td>
                         </tr>
                       ))}
-                      <tr>
-                        <td></td>
-                        <td>
-                          <button
-                            className="submit-btn"
-                            onClick={() =>
-                              handleEvaluation1Submit(team._id)
-                            }
-                            disabled={
-                              isEvaluation1Submitted ||
-                              !isEvaluation1Complete(team._id)
-                            }
-                          >
-                            Submit Evaluation 1
-                          </button>
-                        </td>
-                        <td>
-                          <button
-                            className="submit-btn"
-                            onClick={() =>
-                              handleEvaluation2Submit(team._id)
-                            }
-                            disabled={
-                              !isEvaluation1Submitted ||
-                              !isEvaluation2Complete(team._id)
-                            }
-                          >
-                            Submit Evaluation 2
-                          </button>
-                        </td>
-                      </tr>
                     </tbody>
                   </table>
                 </div>
