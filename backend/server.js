@@ -9,6 +9,9 @@ import acceptedTeamsRoutes from "./routes/acceptedTeamsRoutes.js"; // Add this i
 import reviseRequestRoutes from "./routes/reviseRequestRoutes.js"; // ✅ Updated import
 import mentormeetRoutes from "./routes/mentormeet.js";
 import authRoutes from "./routes/authRoutes.js";
+import evaluationRoutes from "./routes/evaluationRoutes.js";
+
+
 // Import Models
 import MentorRequest from "./models/MentorRequest.js"; // ✅ Import MentorRequest model
 import AcceptedTeam from "./models/AcceptedRequest.js"; // ✅ Import AcceptedTeam model
@@ -30,6 +33,7 @@ app.use("/api/revised-requests", reviseRequestRoutes);
 app.use("/api/mentormeets", mentormeetRoutes); // ✅ Add MentorMeet route
 app.use("/api/auth", authRoutes);
 app.use("/api/panels", panelRoutes);
+app.use("/api/evaluation", evaluationRoutes);
 // ✅ Fetch Mentor Requests
 
 // ✅ Store Accepted Requests

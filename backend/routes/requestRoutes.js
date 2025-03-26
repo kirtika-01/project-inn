@@ -9,7 +9,7 @@ router.get("/:mentorId", async (req, res) => {
   const { mentorId } = req.params;
   try {
     const requests = await MentorRequest.find({ mentorId });
-    console.log("Fetched Requests:", requests);
+    //console.log("Fetched Requests:", requests);
 
     res.json(requests.map(req => ({
       projectName: req.projectName,

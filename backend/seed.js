@@ -240,9 +240,9 @@ const seedPanel = async () => {
         "67f0ab78bc90de1234567890",
       ],
       team_ids: [
-        "67f0ac12cd34ef5678905678", // Example ObjectId for teams
-        "67f0ac34de56ac7890126789",
-        "67f0ac78bc90de1234567891",
+        "67e27848005ec2502ee9a0ff", // Example ObjectId for teams
+        "67e2c735d22747ebcf2a5b7b",
+        "67e2c988d22747ebcf2a5b8d",
       ],
       coordinator_id: "67c3df98bb4bb86485a98765", // Example ObjectId for coordinator
       createdAt: new Date(1743000000000), // 1743000000000 in milliseconds

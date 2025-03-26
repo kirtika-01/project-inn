@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 const RequestsSection = ({ mentor ,onTeamAccepted}) => {
-  console.log("✅ RequestSection mounted!");
+  //console.log("✅ RequestSection mounted!");
 
   const [requests, setRequests] = useState([]);
 
@@ -21,7 +21,7 @@ const RequestsSection = ({ mentor ,onTeamAccepted}) => {
         try {
           const response = await axios.get(`http://localhost:5000/api/mentor-requests/${mentor.id}`);
           setRequests(response.data || []);
-          console.log("📥 Requests fetched:", response.data);
+          //console.log("📥 Requests fetched:", response.data);
 
         } catch (error) {
           console.error("Error fetching mentor requests:", error);
@@ -47,18 +47,18 @@ const handleAccept = async (request) => {
   // const teamName = `Team_${request.projectName.replace(/\s+/g, '_')}_${Math.floor(Math.random() * 1000)}`;
 console.log("🔹 Generated Team Name:", teamName);
   try {
-      console.log("📤 Sending Data:", {
-        requestId: request._id,
-          teamName, // ✅ Auto-generated team name
-          projectName: request.projectName,
-          teamMembers: request.teamMembers.map((member) => ({
-              name: member.name || "Unknown",
-              rollNo: member.rollNo || "N/A",
-          })),
-          description: request.description,
-          mentorId: mentor.id,
-          mentorName: mentor.name,
-      });
+      // console.log("📤 Sending Data:", {
+      //   requestId: request._id,
+      //     teamName, // ✅ Auto-generated team name
+      //     projectName: request.projectName,
+      //     teamMembers: request.teamMembers.map((member) => ({
+      //         name: member.name || "Unknown",
+      //         rollNo: member.rollNo || "N/A",
+      //     })),
+      //     description: request.description,
+      //     mentorId: mentor.id,
+      //     mentorName: mentor.name,
+      // });
 
       const response = await axios.post("http://localhost:5000/api/accepted-requests", {
           requestId: request._id,
@@ -75,7 +75,7 @@ console.log("🔹 Generated Team Name:", teamName);
           headers: { "Content-Type": "application/json" }
       });
 
-      console.log("✅ Request Accepted:", response.data);
+     // console.log("✅ Request Accepted:", response.data);
       // ✅ Pass the new accepted team to AcceptedTeamsSection
       // Update the parent state immediately
       onTeamAccepted(acceptedTeam);

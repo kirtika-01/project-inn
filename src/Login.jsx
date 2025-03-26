@@ -21,12 +21,12 @@ export default function LoginForm() {
     return () => {
       document.body.classList.remove("login-page");
     };
-  }, [navigate]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+    localStorage.removeItem("token"); // Clear old token before new login
     if (!email || !password) {
       setError("All fields are required.");
       return;

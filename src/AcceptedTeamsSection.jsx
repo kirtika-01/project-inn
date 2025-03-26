@@ -17,7 +17,7 @@ const AcceptedTeamsSection = ({ mentor }) => {
           (team) => team.mentorId === mentor.id
         );
         setAcceptedTeams(filteredTeams);
-        console.log("✅ Accepted Teams Updated:", filteredTeams);
+        //console.log("✅ Accepted Teams Updated:", filteredTeams);
       } catch (error) {
         console.error("❌ Error fetching accepted teams:", error);
       }
@@ -55,7 +55,7 @@ const AcceptedTeamsSection = ({ mentor }) => {
       grade
     };
   
-    console.log("📥 Sending Meeting Data:", meetData);
+   // console.log("📥 Sending Meeting Data:", meetData);
   
     try {
       const response = await axios.post("http://localhost:5000/api/mentormeets", meetData);
