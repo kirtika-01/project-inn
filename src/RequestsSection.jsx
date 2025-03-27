@@ -48,18 +48,18 @@ const handleAccept = async (request) => {
   // const teamName = `Team_${request.projectName.replace(/\s+/g, '_')}_${Math.floor(Math.random() * 1000)}`;
 console.log("🔹 Generated Team Name:", teamName);
   try {
-      // console.log("📤 Sending Data:", {
-      //   requestId: request._id,
-      //     teamName, // ✅ Auto-generated team name
-      //     projectName: request.projectName,
-      //     teamMembers: request.teamMembers.map((member) => ({
-      //         name: member.name || "Unknown",
-      //         rollNo: member.rollNo || "N/A",
-      //     })),
-      //     description: request.description,
-      //     mentorId: mentor.id,
-      //     mentorName: mentor.name,
-      // });
+      console.log("📤 Sending Data:", {
+        id: request._id,
+          teamName, // ✅ Auto-generated team name
+          projectName: request.projectName,
+          teamMembers: request.teamMembers.map((member) => ({
+              name: member.name || "Unknown",
+              rollNo: member.rollNo || "N/A",
+          })),
+          description: request.description,
+          mentorId: mentor.id,
+          mentorName: mentor.name,
+      });
 
       const response = await axios.post("http://localhost:5000/api/accepted-requests", {
           id: request._id,
@@ -75,20 +75,28 @@ console.log("🔹 Generated Team Name:", teamName);
       }, {
           headers: { "Content-Type": "application/json" }
       });
-      console.log("Project Name to delete:", projectName);
+      await axios.delete(`http://localhost:5000/api/mentor-requests/${encodeURIComponent(request.projectName)}`);
+
+      toast.success("Request Accepted");
+      await fetchRequests();
+      //console.log("Project Name to delete:", response.data.projectName);
           // ✅ Check response
     console.log("✅ Request Accepted:", response.data);
 
- onsole.log("✅ Request Accepted:", response.data);
+ console.log("✅ Request Accepted:", response.data);
  
-      onTeamAccepted(acceptedTeam);
+      // onTeamAccepted(acceptedTeam);
       // ✅ Step 2: Delete from mentorrequests collection
   // Delete request by projectName after acceptance
-await axios.delete(`http://localhost:5000/api/mentor-requests/${encodeURIComponent(request.projectName)}`);
-console.log(`🗑️ Sent DELETE request for project: ${response.projectName}`);
-console.log("🗑️ Request deleted from mentorrequests.");
-await fetchRequests();
+// await axios.delete(`http://localhost:5000/api/mentor-requests/${encodeURIComponent(request.projectName)}`);
+// console.log(`🗑️ Sent DELETE request for project: ${response.projectName}`);
+// console.log("🗑️ Request deleted from mentorrequests.");
+
 // ✅ Remove from state immediately
+// ✅ Immediately update Accepted Teams state
+if (onTeamAccepted) {
+  onTeamAccepted(response.data.acceptedRequest);
+}
 setRequests((prevRequests) => 
   prevRequests.filter((req) => req.projectName !== request.projectName)
 );
