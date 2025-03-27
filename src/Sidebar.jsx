@@ -35,7 +35,7 @@ const Sidebar = () => {
     if (location.pathname === "/") {
       window.location.reload();
     } else {
-      navigate("/");
+      navigate("/mentor-dashboard");
     }
   };
   // Fetch panel data to check if mentor is part of any panel
@@ -94,12 +94,12 @@ useEffect(() => {
 
       {/* Sidebar */}
       <div ref={sidebarRef} className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
-        <button className="sidebar-btn" onClick={handleDropdown}>
+        {/* <button className="sidebar-btn" onClick={handleDropdown}>
           Mentor Details
-        </button>
+        </button> */}
 
         {/* Dropdown Menu (With Checkboxes) */}
-        {isDropdownOpen && (
+        {/* {isDropdownOpen && (
           <div className="dropdown">
             {["Skill 1", "Skill 2", "Skill 3"].map((skill, index) => (
               <label key={index} className="dropdown-item">
@@ -112,7 +112,7 @@ useEffect(() => {
               </label>
             ))}
           </div>
-        )}
+        )} */}
 
         <button className="sidebar-btn" onClick={handleHomeClick}>Home</button>  
 

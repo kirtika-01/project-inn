@@ -34,7 +34,8 @@ const RequestsSection = ({ mentor ,onTeamAccepted}) => {
     )}`;
   };
 const handleAccept = async (request) => {
-  console.log("✅ Request Object:", request);
+  console.log("🟢 Full Request Object:", request);
+
 
   if (!request || !request.projectName || !request.teamMembers || !request.description||
     !Array.isArray(request.teamMembers) || !mentor) {
@@ -61,7 +62,7 @@ console.log("🔹 Generated Team Name:", teamName);
       // });
 
       const response = await axios.post("http://localhost:5000/api/accepted-requests", {
-          requestId: request._id,
+          id: request._id,
           teamName, // ✅ Using generated team name
           projectName: request.projectName,
           teamMembers: request.teamMembers.map((member) => ({
@@ -74,50 +75,29 @@ console.log("🔹 Generated Team Name:", teamName);
       }, {
           headers: { "Content-Type": "application/json" }
       });
+      console.log("Project Name to delete:", projectName);
+          // ✅ Check response
+    console.log("✅ Request Accepted:", response.data);
 
-     // console.log("✅ Request Accepted:", response.data);
-      // ✅ Pass the new accepted team to AcceptedTeamsSection
-      // Update the parent state immediately
+ onsole.log("✅ Request Accepted:", response.data);
+ 
       onTeamAccepted(acceptedTeam);
       // ✅ Step 2: Delete from mentorrequests collection
-    await axios.delete(`http://localhost:5000/api/mentor-requests/${request.projectName}`);
-    console.log("🗑️ Request deleted from mentorrequests.");
-
-      // setRequests((prevRequests) => prevRequests.filter((req) => req._id !== request._id));
-      // 🔍 Refetch updated requests after acceptance
-    await fetchRequests();
- // ✅ Immediately notify AcceptedTeamsSection to update
- if (props.onTeamAccepted) {
-  props.onTeamAccepted(response.data.acceptedTeam);
-}
+  // Delete request by projectName after acceptance
+await axios.delete(`http://localhost:5000/api/mentor-requests/${encodeURIComponent(request.projectName)}`);
+console.log(`🗑️ Sent DELETE request for project: ${response.projectName}`);
+console.log("🗑️ Request deleted from mentorrequests.");
+await fetchRequests();
+// ✅ Remove from state immediately
+setRequests((prevRequests) => 
+  prevRequests.filter((req) => req.projectName !== request.projectName)
+);
 
   } catch (error) {
       console.error("❌ Request failed:", error.response ? error.response.data : error.message);
   }
 };
-// const handleReject = async (id) => {
-//   console.log("❌ Rejecting request with ID:", id);
-//   try {
-//     const response = await fetch(`http://localhost:5000/api/mentor-requests/${id}`, {
 
-//       method: "DELETE",
-//       headers: { "Content-Type": "application/json" }, // Ensure correct headers
-//     });
-
-//     if (!response.ok) {
-//       const errorText = await response.text(); // Read response as text
-//       throw new Error(`Failed to reject request: ${errorText}`);    }
-
-//     const data = await response.json(); // ✅ Ensure response is parsed
-//     console.log("Request rejected:", data);
-
-//     // ✅ Remove the rejected request from UI
-//     setRequests(prevRequests => prevRequests.filter(req => req._id !== id));
-
-//   } catch (error) {
-//     console.error("Error rejecting request:", error);
-//   }
-// };
 const handleReject = async (request) => {
   if (!request || !request.projectName) {
     console.error("❌ Missing request or projectName:", request);

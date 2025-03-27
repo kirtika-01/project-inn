@@ -8,7 +8,7 @@ import requestRoutes from "./routes/requestRoutes.js"; // Ensure the .js extensi
 import acceptedTeamsRoutes from "./routes/acceptedTeamsRoutes.js"; // Add this import
 import reviseRequestRoutes from "./routes/reviseRequestRoutes.js"; // ✅ Updated import
 import mentormeetRoutes from "./routes/mentormeet.js";
-import authRoutes from "./routes/authRoutes.js";
+import authRoutes from "./routes/authoneRoutes.js";
 import evaluationRoutes from "./routes/evaluationRoutes.js";
 import marksRoutes from "./routes/marksRoutes.js";
 
@@ -33,7 +33,7 @@ app.use("/api/mentor-requests", requestRoutes);
 app.use("/api/accepted-requests", acceptedTeamsRoutes); // ✅ Add this line
 app.use("/api/revised-requests", reviseRequestRoutes);
 app.use("/api/mentormeets", mentormeetRoutes); // ✅ Add MentorMeet route
-app.use("/api/auth", authRoutes);
+app.use("/api/authone", authRoutes);
 app.use("/api/panels", panelRoutes);
 app.use("/api/evaluation", evaluationRoutes);
 app.use("/api/marks", marksRoutes);

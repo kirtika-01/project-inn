@@ -51,6 +51,31 @@ const EvaluationPanel = () => {
     }));
   };
 
+  // const handleEvaluation1Submit = async (teamId, rollNo) => {
+  //   const marks = evaluations[teamId]?.[rollNo]?.evaluation1;
+  //   if (!marks) {
+  //     alert("Please enter marks for Evaluation 1.");
+  //     return;
+  //   }
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const response = await axios.post(
+  //       "http://localhost:5000/api/marks/submit-eval1",
+  //       {
+  //         rollNo,
+  //         teamId,
+  //         evalMarks1: parseInt(marks, 10),
+  //       },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
+  //     console.log(response.data.message);
+  //     setIsEvaluation1Submitted(true);
+  //     alert(`Evaluation 1 submitted for ${rollNo}`);
+  //   } catch (error) {
+  //     console.error("Error submitting Evaluation 1:", error.response.data);
+  //     alert("Failed to submit Evaluation 1.");
+  //   }
+  // };
   const handleEvaluation1Submit = async (teamId, rollNo) => {
     const marks = evaluations[teamId]?.[rollNo]?.evaluation1;
     if (!marks) {
@@ -61,22 +86,41 @@ const EvaluationPanel = () => {
       const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:5000/api/marks/submit-eval1",
-        {
-          rollNo,
-          teamId,
-          evalMarks1: parseInt(marks, 10),
-        },
+        { rollNo, teamId, evalMarks1: parseInt(marks, 10) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(response.data.message);
-      setIsEvaluation1Submitted(true);
-      alert(`Evaluation 1 submitted for ${rollNo}`);
+      alert(response.data.message);
     } catch (error) {
-      console.error("Error submitting Evaluation 1:", error.response.data);
-      alert("Failed to submit Evaluation 1.");
+      console.error("Error submitting Evaluation 1:", error.response?.data || error);
+      alert(error.response?.data?.message || "Failed to submit Evaluation 1.");
     }
   };
-
+  
+  // const handleEvaluation2Submit = async (teamId, rollNo) => {
+  //   const marks = evaluations[teamId]?.[rollNo]?.evaluation2;
+  //   if (!marks) {
+  //     alert("Please enter marks for Evaluation 2.");
+  //     return;
+  //   }
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const response = await axios.post(
+  //       "http://localhost:5000/api/marks/submit-eval2",
+  //       {
+  //         rollNo,
+  //         teamId,
+  //         evalMarks2: parseInt(marks, 10),
+  //       },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
+  //     console.log(response.data.message);
+  //     alert(`Evaluation 2 submitted for ${rollNo}`);
+  //   } catch (error) {
+  //     console.error("Error submitting Evaluation 2:", error.response.data);
+  //     alert("Failed to submit Evaluation 2.");
+  //   }
+  // };
   const handleEvaluation2Submit = async (teamId, rollNo) => {
     const marks = evaluations[teamId]?.[rollNo]?.evaluation2;
     if (!marks) {
@@ -87,21 +131,17 @@ const EvaluationPanel = () => {
       const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:5000/api/marks/submit-eval2",
-        {
-          rollNo,
-          teamId,
-          evalMarks2: parseInt(marks, 10),
-        },
+        { rollNo, teamId, evalMarks2: parseInt(marks, 10) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(response.data.message);
-      alert(`Evaluation 2 submitted for ${rollNo}`);
+      alert(response.data.message);
     } catch (error) {
-      console.error("Error submitting Evaluation 2:", error.response.data);
-      alert("Failed to submit Evaluation 2.");
+      console.error("Error submitting Evaluation 2:", error.response?.data || error);
+      alert(error.response?.data?.message || "Failed to submit Evaluation 2.");
     }
   };
-
+  
   return (
     <div className="evaluation-panel">
       <h2 className="heading">Assigned Teams</h2>

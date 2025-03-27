@@ -79,7 +79,6 @@ const Header = ({ onLogout }) => {
               <p><strong>ID:</strong> {mentorData.id}</p>
               <p><strong>Name:</strong> {mentorData.name}</p>
               <p><strong>Email:</strong> {mentorData.email}</p>
-              <p><strong>Expertise:</strong> {mentorData.expertise}</p>
             </div>
           )}
         </div>

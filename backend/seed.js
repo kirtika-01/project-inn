@@ -93,8 +93,8 @@
 //     name: "Pushpa Devi",
 //   },
 //   {
-//     _id: new mongoose.Types.ObjectId("67975c02cbe610a883174504"),
-//     name: "Prof. Ramesh Gupta",
+//     _id: new mongoose.Types.ObjectId("67e46962df81906b5ade8d71"),
+//     name: "Dr. Neha Agarwal",
 //   },
 // ];
 
@@ -212,7 +212,7 @@
 //   }
 // };
 
-// // 🏃 Run the function
+// 🏃 Run the function
 // seedData();
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -235,9 +235,9 @@ const seedPanel = async () => {
     // Define the panel document to insert
     const panelRecord = {
       teacher_ids: [
-        "67975ba5cbe610a883174503", // Example ObjectId for teachers
-        "67f0ab34de56ac7890123456",
-        "67f0ab78bc90de1234567890",
+        "67e46962df81906b5ade8d71", // Example ObjectId for teachers
+        "67e46964df81906b5ade8d77",
+        "67e46968df81906b5ade8d83",
       ],
       team_ids: [
         "67e27848005ec2502ee9a0ff", // Example ObjectId for teams
